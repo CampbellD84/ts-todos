@@ -19,8 +19,8 @@ const getTodos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const todos = yield todo_1.default.find();
         res.status(200).json({ todos });
     }
-    catch (error) {
-        throw error;
+    catch ({ error }) {
+        res.status(500).json({ error, message: "Cannot get Todos." });
     }
 });
 exports.getTodos = getTodos;
@@ -30,14 +30,16 @@ const addTodo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const todo = new todo_1.default({
             name: body.name,
             description: body.description,
-            status: body.status
+            status: body.status,
         });
         const newTodo = yield todo.save();
         const allTodos = yield todo_1.default.find();
-        res.status(201).json({ message: "Todo added", todo: newTodo, todos: allTodos });
+        res
+            .status(201)
+            .json({ message: "Todo added", todo: newTodo, todos: allTodos });
     }
-    catch (error) {
-        throw error;
+    catch ({ error }) {
+        res.status(500).json({ error, message: "Cannot Add Todo" });
     }
 });
 exports.addTodo = addTodo;
@@ -52,8 +54,8 @@ const updateTodo = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             todos: allTodos
         });
     }
-    catch (error) {
-        throw error;
+    catch ({ error }) {
+        res.status(500).json({ error, message: "Cannot update Todo" });
     }
 });
 exports.updateTodo = updateTodo;
@@ -67,8 +69,8 @@ const deleteTodo = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             todos: allTodos
         });
     }
-    catch (error) {
-        throw error;
+    catch ({ error }) {
+        res.status(500).json({ error, message: "Cannot delete Todo" });
     }
 });
 exports.deleteTodo = deleteTodo;

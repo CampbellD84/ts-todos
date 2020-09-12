@@ -6,8 +6,8 @@ const getTodos = async (req: Request, res: Response): Promise<void> => {
     try {
         const todos: ITodo[] = await Todo.find()
         res.status(200).json({ todos })
-    } catch (error) {
-        throw error
+    } catch ({ error }) {
+        res.status(500).json({ error, message: "Cannot get Todos." })
     }
 }
 
@@ -18,15 +18,17 @@ const addTodo = async (req: Request, res: Response): Promise<void> => {
         const todo: ITodo = new Todo({
             name: body.name,
             description: body.description,
-            status: body.status
+            status: body.status,
         })
 
         const newTodo: ITodo = await todo.save()
         const allTodos: ITodo[] = await Todo.find()
 
-        res.status(201).json({ message: "Todo added", todo: newTodo, todos: allTodos })
-    } catch (error) {
-        throw error
+        res
+            .status(201)
+            .json({ message: "Todo added", todo: newTodo, todos: allTodos })
+    } catch ({ error }) {
+        res.status(500).json({ error, message: "Cannot Add Todo" })
     }
 }
 
@@ -44,8 +46,8 @@ const updateTodo = async (req: Request, res: Response): Promise<void> => {
             todo: updateTodo,
             todos: allTodos
         })
-    } catch (error) {
-        throw error
+    } catch ({ error }) {
+        res.status(500).json({ error, message: "Cannot update Todo" })
     }
 }
 
@@ -60,8 +62,8 @@ const deleteTodo = async (req: Request, res: Response): Promise<void> => {
             todo: deletedTodo,
             todos: allTodos
         })
-    } catch (error) {
-        throw error
+    } catch ({ error }) {
+        res.status(500).json({ error, message: "Cannot delete Todo" })
     }
 }
 
